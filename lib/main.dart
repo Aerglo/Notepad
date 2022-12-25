@@ -54,8 +54,15 @@ class _MyFirstPageState extends State<MyFirstPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.grey.shade800,
       appBar: AppBar(
-        title: const Text('Notes'),
+        title: const Text(
+          'Notes',
+          style: TextStyle(
+            color: Colors.black87,
+          ),
+        ),
+        backgroundColor: Colors.yellow.shade600,
       ),
       body: FutureBuilder(
         future: NotesDatabases.instance.readAllNotes(),
@@ -84,11 +91,27 @@ class _MyFirstPageState extends State<MyFirstPage> {
                             );
                             refreshNotes();
                           },
-                          child: Card(
-                            child: Column(
-                              children: [
-                                Text(notes[index].title!),
-                              ],
+                          child: Padding(
+                            padding: const EdgeInsets.fromLTRB(
+                              8.0,
+                              6.0,
+                              8.0,
+                              0,
+                            ),
+                            child: Card(
+                              color: Colors.grey.shade300,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10),
+                              ),
+                              elevation: 3,
+                              child: ListTile(
+                                title: Text(notes[index].title!),
+                                subtitle: Text(
+                                  notes[index].description!,
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                              ),
                             ),
                           ),
                         );
@@ -106,7 +129,11 @@ class _MyFirstPageState extends State<MyFirstPage> {
           );
           refreshNotes();
         },
-        child: const Icon(Icons.add),
+        backgroundColor: Colors.yellow.shade600,
+        child: const Icon(
+          Icons.add,
+          color: Colors.black87,
+        ),
       ),
     );
   }
