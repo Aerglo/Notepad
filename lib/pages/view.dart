@@ -99,9 +99,8 @@ class _UpdateNoteState extends State<UpdateNote> {
                             ),
                           ),
                         ),
-                        validator: (title) => title != null && title.isEmpty
-                            ? 'Value should not be empty'
-                            : null,
+                        validator: (title) =>
+                            title!.isEmpty ? 'Value should not be empty' : null,
                         onChanged: (String title) {
                           setState(() {
                             this.title = title;
@@ -116,8 +115,9 @@ class _UpdateNoteState extends State<UpdateNote> {
                         textAlignVertical: TextAlignVertical.top,
                         initialValue: description,
                         decoration: InputDecoration(
+                          fillColor: Colors.white,
                           border: OutlineInputBorder(
-                            borderSide: BorderSide(color: Colors.grey.shade400),
+                            borderSide: const BorderSide(color: Colors.white),
                             borderRadius: BorderRadius.circular(8),
                           ),
                           alignLabelWithHint: true,
@@ -127,10 +127,9 @@ class _UpdateNoteState extends State<UpdateNote> {
                           ),
                         ),
                         maxLines: 12,
-                        validator: (descripton) =>
-                            description != null && description.isEmpty
-                                ? 'Value should not be empty'
-                                : null,
+                        validator: (descripton) => descripton!.isEmpty
+                            ? 'Value should not be empty'
+                            : null,
                         onChanged: (String description) {
                           setState(() {
                             this.description = description;
@@ -142,8 +141,31 @@ class _UpdateNoteState extends State<UpdateNote> {
                         children: <Widget>[
                           IconButton(
                             onPressed: () {
-                              deleteNote();
-                              Navigator.pop(context);
+                              showDialog(
+                                context: context,
+                                builder: (context) {
+                                  return AlertDialog(
+                                    title: const Text('Alert'),
+                                    content: const Text('Are you sure? '),
+                                    actions: [
+                                      TextButton(
+                                        onPressed: () {
+                                          Navigator.pop(context);
+                                        },
+                                        child: const Text('Cancel'),
+                                      ),
+                                      TextButton(
+                                        onPressed: () {
+                                          deleteNote();
+                                          Navigator.pop(context);
+                                          Navigator.pop(context);
+                                        },
+                                        child: const Text('Yes'),
+                                      ),
+                                    ],
+                                  );
+                                },
+                              );
                             },
                             icon: Icon(
                               Icons.delete_outline_rounded,
@@ -152,7 +174,10 @@ class _UpdateNoteState extends State<UpdateNote> {
                           ),
                           IconButton(
                             onPressed: () async {
-                              addOrUpdateNote();
+                              if (_formkey.currentState!.validate()) {
+                                addOrUpdateNote();
+                              }
+
                               Navigator.pop(context);
                             },
                             icon: Icon(
@@ -196,8 +221,56 @@ class _UpdateNoteState extends State<UpdateNote> {
                     children: <Widget>[
                       IconButton(
                         onPressed: () {
-                          deleteNote();
-                          Navigator.pop(context);
+                          showDialog(
+                            context: context,
+                            builder: (context) {
+                              return AlertDialog(
+                                backgroundColor: Colors.grey.shade800,
+                                title: Text(
+                                  'Alert',
+                                  style: TextStyle(
+                                    color: Colors.yellow.shade600,
+                                  ),
+                                ),
+                                content: Text(
+                                  'Are you sure?',
+                                  style: TextStyle(
+                                    color: Colors.grey.shade400,
+                                  ),
+                                ),
+                                actions: [
+                                  TextButton(
+                                    onPressed: () {
+                                      Navigator.pop(context);
+                                    },
+                                    child: Text(
+                                      'Cancel',
+                                      style: TextStyle(
+                                        color: Colors.yellow.shade600,
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ),
+                                  TextButton(
+                                    onPressed: () {
+                                      deleteNote();
+                                      Navigator.pop(context);
+                                      Navigator.pop(context);
+                                    },
+                                    child: Text(
+                                      'Yes',
+                                      style: TextStyle(
+                                        color: Colors.yellow.shade600,
+                                        fontSize: 15,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              );
+                            },
+                          );
                         },
                         icon: Icon(
                           Icons.delete_outline_rounded,

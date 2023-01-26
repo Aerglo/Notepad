@@ -75,8 +75,14 @@ class _MyFirstPageState extends State<MyFirstPage> {
           return isLoading
               ? const CircularProgressIndicator()
               : notes.isEmpty
-                  ? const Center(
-                      child: Text("you dont't have any notes for show"),
+                  ? Center(
+                      child: Text(
+                        "you dont't have any notes for show",
+                        style: TextStyle(
+                          color: Colors.grey.shade400,
+                          fontSize: 18,
+                        ),
+                      ),
                     )
                   : ListView.builder(
                       itemBuilder: (context, index) {
