@@ -99,8 +99,9 @@ class _UpdateNoteState extends State<UpdateNote> {
                             ),
                           ),
                         ),
-                        validator: (title) =>
-                            title!.isEmpty ? 'Value should not be empty' : null,
+                        validator: (title) => title != null && title.isEmpty
+                            ? 'Title should not be empty'
+                            : null,
                         onChanged: (String title) {
                           setState(() {
                             this.title = title;
@@ -127,9 +128,10 @@ class _UpdateNoteState extends State<UpdateNote> {
                           ),
                         ),
                         maxLines: 12,
-                        validator: (descripton) => descripton!.isEmpty
-                            ? 'Value should not be empty'
-                            : null,
+                        validator: (description) =>
+                            description != null && description.isEmpty
+                                ? 'Desciption should not be empty'
+                                : null,
                         onChanged: (String description) {
                           setState(() {
                             this.description = description;
@@ -138,6 +140,7 @@ class _UpdateNoteState extends State<UpdateNote> {
                       ),
                       const SizedBox(height: 20),
                       Row(
+                        mainAxisAlignment: MainAxisAlignment.end,
                         children: <Widget>[
                           IconButton(
                             onPressed: () {
@@ -174,11 +177,22 @@ class _UpdateNoteState extends State<UpdateNote> {
                           ),
                           IconButton(
                             onPressed: () async {
-                              if (_formkey.currentState!.validate()) {
+                              bool isValid = _formkey.currentState!.validate();
+                              if (isValid) {
                                 addOrUpdateNote();
+                                Navigator.pop(context);
+                              } else {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: const Text(
+                                        'Title and description should not be empty'),
+                                    behavior: SnackBarBehavior.floating,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                  ),
+                                );
                               }
-
-                              Navigator.pop(context);
                             },
                             icon: Icon(
                               Icons.save_outlined,
@@ -205,19 +219,25 @@ class _UpdateNoteState extends State<UpdateNote> {
                       fontSize: 28,
                     ),
                   ),
-                  const SizedBox(
+                  SizedBox(
                     height: 40,
+                    child: Center(
+                      child: Divider(
+                        color: Colors.grey.shade400,
+                        thickness: 2,
+                      ),
+                    ),
                   ),
                   Text(
                     widget.notes!.description!,
                     style: TextStyle(
-                      // fontWeight: FontWeight.bold,
                       color: Colors.grey.shade400,
                       fontSize: 18,
                     ),
                   ),
                   const SizedBox(height: 20),
                   Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
                     children: <Widget>[
                       IconButton(
                         onPressed: () {
