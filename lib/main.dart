@@ -59,10 +59,10 @@ class _MyFirstPageState extends State<MyFirstPage> {
         title: const Text(
           'Notes',
           style: TextStyle(
-            color: Colors.black87,
+            color: Colors.white70,
           ),
         ),
-        backgroundColor: Colors.yellow.shade600,
+        backgroundColor: Colors.teal.shade500,
       ),
       body: FutureBuilder(
         future: NotesDatabases.instance.readAllNotes(),
@@ -75,11 +75,11 @@ class _MyFirstPageState extends State<MyFirstPage> {
           return isLoading
               ? const CircularProgressIndicator()
               : notes.isEmpty
-                  ? Center(
+                  ? const Center(
                       child: Text(
                         "you dont't have any notes for show",
                         style: TextStyle(
-                          color: Colors.grey.shade400,
+                          color: Colors.white70,
                           fontSize: 18,
                         ),
                       ),
@@ -105,7 +105,7 @@ class _MyFirstPageState extends State<MyFirstPage> {
                               0,
                             ),
                             child: Card(
-                              color: Colors.grey.shade300,
+                              color: Colors.white70,
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(10),
                               ),
@@ -135,10 +135,10 @@ class _MyFirstPageState extends State<MyFirstPage> {
           );
           refreshNotes();
         },
-        backgroundColor: Colors.yellow.shade600,
+        backgroundColor: Colors.teal.shade500,
         child: const Icon(
           Icons.add,
-          color: Colors.black87,
+          color: Colors.white70,
         ),
       ),
     );
