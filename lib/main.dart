@@ -51,6 +51,14 @@ class _MyFirstPageState extends State<MyFirstPage> {
     });
   }
 
+  TextDirection directionSet(Note note) {
+    if (note.direction == 'rtl') {
+      return TextDirection.rtl;
+    } else {
+      return TextDirection.ltr;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -114,6 +122,7 @@ class _MyFirstPageState extends State<MyFirstPage> {
                                 title: Text(notes[index].title!),
                                 subtitle: Text(
                                   notes[index].description!,
+                                  textDirection: directionSet(notes[index]),
                                   maxLines: 1,
                                   overflow: TextOverflow.ellipsis,
                                 ),

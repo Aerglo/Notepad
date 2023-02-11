@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../Models/note.dart';
 import '../Database/note_database.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class UpdateNote extends StatefulWidget {
   final Note? notes;
@@ -15,11 +16,17 @@ class _UpdateNoteState extends State<UpdateNote> {
   final _formkey = GlobalKey<FormState>();
   late String title;
   late String description;
+  late TextDirection textDirection;
 
   @override
   void initState() {
     title = widget.notes?.title ?? '';
     description = widget.notes?.description ?? '';
+    if (widget.notes != null) {
+      textDirection = directionSet(widget.notes!);
+    } else {
+      textDirection = TextDirection.ltr;
+    }
     super.initState();
   }
 
@@ -43,6 +50,17 @@ class _UpdateNoteState extends State<UpdateNote> {
     }
   }
 
+  TextDirection directionSet(Note? note) {
+    if (note == null) {
+      return TextDirection.ltr;
+    }
+    if (note.direction == 'rtl') {
+      return TextDirection.rtl;
+    } else {
+      return TextDirection.ltr;
+    }
+  }
+
   Future delete() async {
     NotesDatabases.instance.deletNote(widget.notes!.id!);
   }
@@ -51,6 +69,7 @@ class _UpdateNoteState extends State<UpdateNote> {
     final note = widget.notes!.copy(
       title: title,
       description: description,
+      direction: setDirection(textDirection),
     );
     await NotesDatabases.instance.updateNote(note);
   }
@@ -59,8 +78,33 @@ class _UpdateNoteState extends State<UpdateNote> {
     final note = Note(
       title: title,
       description: description,
+      direction: setDirection(textDirection),
     );
     await NotesDatabases.instance.create(note);
+  }
+
+  String setDirection(TextDirection textDirection) {
+    if (textDirection == TextDirection.ltr) {
+      return 'ltr';
+    } else {
+      return 'rtl';
+    }
+  }
+
+  Alignment alignment() {
+    if (widget.notes!.direction == 'rtl') {
+      return Alignment.centerRight;
+    } else {
+      return Alignment.centerLeft;
+    }
+  }
+
+  TextDirection direction() {
+    if (widget.notes!.direction == 'rtl') {
+      return TextDirection.rtl;
+    } else {
+      return TextDirection.ltr;
+    }
   }
 
   @override
@@ -115,6 +159,7 @@ class _UpdateNoteState extends State<UpdateNote> {
                             color: Colors.grey.shade400,
                           ),
                           textAlignVertical: TextAlignVertical.top,
+                          textDirection: textDirection,
                           initialValue: description,
                           decoration: InputDecoration(
                             fillColor: Colors.white,
@@ -143,6 +188,24 @@ class _UpdateNoteState extends State<UpdateNote> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.end,
                           children: <Widget>[
+                            IconButton(
+                              color: Colors.grey.shade400,
+                              icon: SvgPicture.asset('assets/rtl.svg'),
+                              onPressed: () {
+                                setState(() {
+                                  textDirection = TextDirection.rtl;
+                                });
+                              },
+                            ),
+                            IconButton(
+                              color: Colors.grey.shade400,
+                              icon: SvgPicture.asset('assets/ltr.svg'),
+                              onPressed: () {
+                                setState(() {
+                                  textDirection = TextDirection.ltr;
+                                });
+                              },
+                            ),
                             IconButton(
                               onPressed: () {
                                 showDialog(
@@ -256,11 +319,15 @@ class _UpdateNoteState extends State<UpdateNote> {
                           ),
                         ),
                       ),
-                      Text(
-                        widget.notes!.description!,
-                        style: TextStyle(
-                          color: Colors.grey.shade400,
-                          fontSize: 18,
+                      Align(
+                        alignment: alignment(),
+                        child: Text(
+                          widget.notes!.description!,
+                          textDirection: direction(),
+                          style: TextStyle(
+                            color: Colors.grey.shade400,
+                            fontSize: 18,
+                          ),
                         ),
                       ),
                       const SizedBox(height: 20),

@@ -8,7 +8,7 @@ class NotesDatabases {
   static Database? _database;
   Future<Database> get database async {
     if (_database != null) return _database!;
-    _database = await _initDB('notes.db');
+    _database = await _initDB('notes1.db');
     return _database!;
   }
 
@@ -25,7 +25,8 @@ class NotesDatabases {
     CREATE TABLE $tableName (
       ${NoteFields.id} $idType,
       ${NoteFields.title} $textType,
-      ${NoteFields.description} $textType
+      ${NoteFields.description} $textType,
+      ${NoteFields.direction} $textType
     )
 ''');
   }
